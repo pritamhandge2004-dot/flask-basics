@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 50px auto;
             padding: 20px;
             background-color: #f0f4f8;
@@ -32,23 +32,68 @@
             font-weight: bold;
         }
         nav a:hover { color: #2b6cb0; }
-        .profile-card {
+        .profile-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px;
+            padding: 40px;
             border-radius: 10px;
             margin: 20px 0;
+            text-align: center;
         }
-        .profile-card h2 {
-            margin-top: 0;
-            font-size: 28px;
+        .profile-header h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
         }
-        .profile-item {
-            margin: 10px 0;
-            font-size: 16px;
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
         }
-        .profile-item span {
+        .stat-box {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 14px;
             opacity: 0.8;
+        }
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .profile-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #4299e1;
+        }
+        .profile-card h3 {
+            color: #2d3748;
+            margin-top: 0;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            color: #718096;
+            font-weight: 500;
+        }
+        .info-value {
+            font-weight: 600;
         }
         .badge {
             display: inline-block;
@@ -58,10 +103,16 @@
             font-weight: bold;
         }
         .badge-success {
-            background: #48bb78;
+            background: #c6f6d5;
+            color: #276749;
         }
         .badge-warning {
-            background: #ed8936;
+            background: #feebc8;
+            color: #c05621;
+        }
+        .badge-danger {
+            background: #fed7d7;
+            color: #c53030;
         }
         .code-example {
             background: #2d3748;
@@ -70,7 +121,13 @@
             border-radius: 5px;
             font-family: monospace;
             margin: 15px 0;
-            overflow-x: auto;
+        }
+        .exercise-complete {
+            background: #f0fff4;
+            border: 2px solid #48bb78;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
         }
     </style>
 </head>
@@ -81,51 +138,158 @@
             <a href="/profile">Profile</a>
             <a href="/skills">Skills</a>
             <a href="/projects">Projects</a>
+            <a href="/grades">Grades</a>
         </nav>
 
-        <h1>User Profile</h1>
-        <p>This page demonstrates passing multiple variables to a template.</p>
+        <div class="exercise-complete">
+            <h3>✅ Exercises 3.1 & 3.2 Completed</h3>
+            <p><strong>Exercise 3.1:</strong> Added more fields to profile (email, city, phone, enrollment date, semester, CGPA)</p>
+            <p><strong>Exercise 3.2:</strong> Conditional display for enrollment status with different badge colors</p>
+        </div>
 
-        <!-- Profile card using multiple variables -->
-        <div class="profile-card">
+        <h1>Student Profile</h1>
+        
+        <!-- Profile Header -->
+        <div class="profile-header">
             <h2>{{ name }}</h2>
-            <div class="profile-item">
-                <span>Age:</span> {{ age }} years old
-            </div>
-            <div class="profile-item">
-                <span>Course:</span> {{ course }}
-            </div>
-            <div class="profile-item">
-                <span>Status:</span>
-                <!-- Using Jinja2 conditional (if/else) -->
+            <p>{{ course }}</p>
+            
+            <!-- Exercise 3.2: Conditional display -->
+            <div style="margin-top: 15px;">
                 {% if is_enrolled %}
-                    <span class="badge badge-success">Enrolled</span>
+                    <span class="badge badge-success" style="font-size: 16px; padding: 8px 25px;">
+                        ✓ Currently Enrolled
+                    </span>
                 {% else %}
-                    <span class="badge badge-warning">Not Enrolled</span>
+                    <span class="badge badge-danger" style="font-size: 16px; padding: 8px 25px;">
+                        ✗ Not Enrolled
+                    </span>
                 {% endif %}
             </div>
+            
+            <div class="profile-stats">
+                <div class="stat-box">
+                    <div class="stat-value">{{ age }}</div>
+                    <div class="stat-label">Age</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">{{ semester }}</div>
+                    <div class="stat-label">Semester</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">{{ cgpa }}</div>
+                    <div class="stat-label">CGPA</div>
+                </div>
+            </div>
         </div>
 
-        <h2>How It Works</h2>
-        <p>In <code>app.py</code>, we pass multiple variables:</p>
+        <!-- Profile Information Grid - Exercise 3.1: Added more fields -->
+        <div class="profile-grid">
+            <!-- Personal Information -->
+            <div class="profile-card">
+                <h3>📋 Personal Information</h3>
+                <div class="info-row">
+                    <span class="info-label">Full Name:</span>
+                    <span class="info-value">{{ name }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Age:</span>
+                    <span class="info-value">{{ age }} years</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">City:</span>
+                    <span class="info-value">{{ city }}</span>
+                </div>
+            </div>
 
-        <div class="code-example">
-return render_template('profile.html',<br>
-&nbsp;&nbsp;&nbsp;&nbsp;name='Sarah',<br>
-&nbsp;&nbsp;&nbsp;&nbsp;age=22,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;course='Web Development',<br>
-&nbsp;&nbsp;&nbsp;&nbsp;is_enrolled=True)
+            <!-- Contact Information -->
+            <div class="profile-card">
+                <h3>📞 Contact Details</h3>
+                <div class="info-row">
+                    <span class="info-label">Email:</span>
+                    <span class="info-value">{{ email }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Phone:</span>
+                    <span class="info-value">{{ phone }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Enrollment Date:</span>
+                    <span class="info-value">{{ enrollment_date }}</span>
+                </div>
+            </div>
+
+            <!-- Academic Information -->
+            <div class="profile-card">
+                <h3>🎓 Academic Details</h3>
+                <div class="info-row">
+                    <span class="info-label">Course:</span>
+                    <span class="info-value">{{ course }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Current Semester:</span>
+                    <span class="info-value">{{ semester }}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">CGPA:</span>
+                    <span class="info-value">
+                        {{ cgpa }}
+                        {% if cgpa >= 9.0 %}
+                            <span class="badge badge-success">Excellent</span>
+                        {% elif cgpa >= 8.0 %}
+                            <span class="badge badge-success">Very Good</span>
+                        {% elif cgpa >= 7.0 %}
+                            <span class="badge badge-warning">Good</span>
+                        {% else %}
+                            <span class="badge badge-danger">Needs Improvement</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
         </div>
 
-        <h2>Jinja2 Conditionals</h2>
-        <p>Notice the enrollment status badge? It uses a Jinja2 if-statement:</p>
+        <!-- Enrollment Status Details - Exercise 3.2: Extended conditional -->
+        <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <h3>Enrollment Status Details</h3>
+            {% if is_enrolled %}
+                <div style="color: #276749;">
+                    <p>✅ <strong>Active Student</strong></p>
+                    <p>Enrolled in {{ course }} since {{ enrollment_date }}</p>
+                    <p>Currently in Semester {{ semester }} with CGPA {{ cgpa }}</p>
+                </div>
+            {% else %}
+                <div style="color: #c53030;">
+                    <p>❌ <strong>Not Currently Enrolled</strong></p>
+                    <p>Last enrolled: {{ enrollment_date }}</p>
+                    <p>Previous CGPA: {{ cgpa }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <h2>Python Code Behind This Page:</h2>
+        <div class="code-example">
+# Exercise 3.1: Added more fields<br>
+user_data = {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'name': 'Pritam',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'age': 25,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'course': 'Web Development with Flask',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'is_enrolled': True,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'email': 'pritam@example.com',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'city': 'Kolkata',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'phone': '+91 98765 43210',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'enrollment_date': '2024-01-15',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'current_semester': 3,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;'cgpa': 8.7<br>
+}
+        </div>
 
         <div class="code-example">
-&#123;% if is_enrolled %&#125;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="badge-success"&gt;Enrolled&lt;/span&gt;<br>
-&#123;% else %&#125;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="badge-warning"&gt;Not Enrolled&lt;/span&gt;<br>
-&#123;% endif %&#125;
+{# Exercise 3.2: Conditional display #}<br>
+{% raw %}{% if is_enrolled %}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="badge-success"&gt;✓ Currently Enrolled&lt;/span&gt;<br>
+{% else %}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;span class="badge-danger"&gt;✗ Not Enrolled&lt;/span&gt;<br>
+{% endif %}{% endraw %}
         </div>
     </div>
 </body>

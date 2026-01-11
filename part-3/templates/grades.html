@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grades - Jinja2 Advanced</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f4f8;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 { color: #2d3748; }
+        nav {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #edf2f7;
+            border-radius: 5px;
+        }
+        nav a {
+            margin-right: 15px;
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover { color: #2b6cb0; }
+        .student-header {
+            background: linear-gradient(135deg, #4c51bf 0%, #7f9cf5 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .stat-box {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            border-top: 4px solid #4c51bf;
+        }
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #4c51bf;
+        }
+        .stat-label {
+            color: #718096;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background: #edf2f7;
+            font-weight: bold;
+            color: #4a5568;
+        }
+        tr:hover {
+            background: #f7fafc;
+        }
+        .grade-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .grade-a-plus { background: #c6f6d5; color: #276749; }
+        .grade-a { background: #c6f6d5; color: #276749; }
+        .grade-a-minus { background: #d0f4de; color: #276749; }
+        .grade-b-plus { background: #feebc8; color: #c05621; }
+        .grade-b { background: #fed7d7; color: #c53030; }
+        .grade-distribution {
+            display: flex;
+            height: 200px;
+            align-items: flex-end;
+            gap: 10px;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+        .grade-bar {
+            flex: 1;
+            background: #4c51bf;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: height 0.3s;
+        }
+        .grade-bar:hover {
+            background: #667eea;
+        }
+        .grade-label {
+            position: absolute;
+            bottom: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 12px;
+            color: #718096;
+        }
+        .grade-count {
+            position: absolute;
+            top: -25px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-weight: bold;
+            color: #4c51bf;
+        }
+        .code-example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 15px 0;
+        }
+        .exercise-complete {
+            background: #f0fff4;
+            border: 2px solid #48bb78;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/profile">Profile</a>
+            <a href="/skills">Skills</a>
+            <a href="/projects">Projects</a>
+            <a href="/grades">Grades</a>
+        </nav>
+
+        <div class="exercise-complete">
+            <h3>✅ Exercise 3.3: Grades Page Created</h3>
+            <p>This page demonstrates passing a dictionary of grades from Python to HTML and displaying it in a table using Jinja2 for loops and conditionals.</p>
+        </div>
+
+        <div class="student-header">
+            <h1>Academic Grades</h1>
+            <h2>{{ student_name }}</h2>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-value">{{ grades|length }}</div>
+                <div class="stat-label">Total Subjects</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">{{ average_grade }}</div>
+                <div class="stat-label">Average Grade Point</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">
+                    {% set total_points = grades|length * 10 %}
+                    {% set obtained_points = average_grade * grades|length %}
+                    {{ ((obtained_points / total_points) * 100)|round(1) }}%
+                </div>
+                <div class="stat-label">Overall Percentage</div>
+            </div>
+        </div>
+
+        <!-- Grades Table -->
+        <h2>Subject-wise Grades</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Subject Name</th>
+                    <th>Grade</th>
+                    <th>Grade Points</th>
+                    <th>Performance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject, grade in grades.items() %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ subject }}</td>
+                    <td>
+                        <span class="grade-badge grade-{{ grade|lower|replace('+', '-plus')|replace('-', '-minus') }}">
+                            {{ grade }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if grade == 'A+' %}10
+                        {% elif grade == 'A' %}9
+                        {% elif grade == 'A-' %}8
+                        {% elif grade == 'B+' %}7
+                        {% elif grade == 'B' %}6
+                        {% else %}5
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if grade in ['A+', 'A'] %}
+                            <span style="color: #276749;">Excellent</span>
+                        {% elif grade == 'A-' %}
+                            <span style="color: #d69e2e;">Very Good</span>
+                        {% elif grade == 'B+' %}
+                            <span style="color: #d69e2e;">Good</span>
+                        {% else %}
+                            <span style="color: #c53030;">Needs Improvement</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Grade Distribution -->
+        <h2>Grade Distribution</h2>
+        <div class="grade-distribution">
+            {% for grade, count in grade_counts.items() %}
+            <div class="grade-bar" style="height: {{ (count / grades|length * 180) + 20 }}px;">
+                <div class="grade-count">{{ count }}</div>
+                <div class="grade-label">{{ grade }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Analysis -->
+        <h2>Academic Analysis</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
+            <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+                <h3>📊 Performance Summary</h3>
+                <ul>
+                    <li><strong>Total Subjects:</strong> {{ grades|length }}</li>
+                    <li><strong>Average Grade Point:</strong> {{ average_grade }}</li>
+                    <li><strong>Highest Grade:</strong> A+ ({{ grade_counts.get('A+', 0) }} subjects)</li>
+                    <li><strong>Lowest Grade:</strong> 
+                        {% if 'F' in grade_counts %}F
+                        {% elif 'D' in grade_counts %}D
+                        {% elif 'C' in grade_counts %}C
+                        {% else %}B or above
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+            <div style="background: #f8fafc; padding: 20px; border-radius: 8px;">
+                <h3>🎯 Recommendations</h3>
+                <ul>
+                    {% if average_grade >= 9.0 %}
+                        <li>Excellent performance! Maintain this standard.</li>
+                        <li>Consider taking advanced courses.</li>
+                    {% elif average_grade >= 8.0 %}
+                        <li>Very good performance. Keep improving.</li>
+                        <li>Focus on subjects with grades below A.</li>
+                    {% elif average_grade >= 7.0 %}
+                        <li>Good performance. Room for improvement.</li>
+                        <li>Seek help in challenging subjects.</li>
+                    {% else %}
+                        <li>Needs significant improvement.</li>
+                        <li>Consider academic counseling.</li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Python Code -->
+        <h2>Python Code for This Page:</h2>
+        <div class="code-example">
+# Exercise 3.3: Create a grades page<br>
+@app.route('/grades')<br>
+def grades():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;grades_data = {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Python Programming': 'A+',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Web Development': 'A',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'Database Systems': 'B+',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ... more subjects ...<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return render_template('grades.html',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;grades=grades_data,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;average_grade=8.5,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;student_name="Pritam")<br>
+        </div>
+
+        <div class="code-example">
+{# Jinja2 template code #}<br>
+{% raw %}{% for subject, grade in grades.items() %}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;tr&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;{{ loop.index }}&lt;/td&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;{{ subject }}&lt;/td&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;{{ grade }}&lt;/td&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&lt;/tr&gt;<br>
+{% endfor %}{% endraw %}
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f0f4f8; border-radius: 8px;">
+            <h3>✅ All Exercises Completed!</h3>
+            <p>Exercise 3.1, 3.2, and 3.3 have been successfully implemented.</p>
+        </div>
+    </div>
+</body>
+</html>

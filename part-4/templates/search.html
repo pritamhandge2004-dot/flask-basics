@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search: {{ query }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f4f8;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        nav {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #edf2f7;
+            border-radius: 5px;
+        }
+        nav a {
+            margin-right: 15px;
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .search-header {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .search-header h1 {
+            margin: 0 0 10px 0;
+        }
+        .search-meta {
+            opacity: 0.9;
+        }
+        .results-count {
+            background: #feebc8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .result-card {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.2s;
+        }
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        .result-type {
+            display: inline-block;
+            padding: 3px 10px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        .result-price {
+            color: #48bb78;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .no-results {
+            background: #fed7d7;
+            border: 1px solid #fc8181;
+            color: #c53030;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .exercise-info {
+            background: #feebc8;
+            border-left: 4px solid #ed8936;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .new-search {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+        .new-search a {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ed8936;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About</a>
+            <a href="/links">URL Builder</a>
+            <a href="/search-form">Search</a>
+        </nav>
+
+        <div class="exercise-info">
+            <h3>✅ Exercise 4.3: Search Results</h3>
+            <p>Route: <code>@app.route('/search/&lt;query&gt;')</code></p>
+            <p>Captured Query: <strong>"{{ query }}"</strong></p>
+        </div>
+
+        <div class="search-header">
+            <h1>Search Results</h1>
+            <div class="search-meta">
+                <p>Searching for: <strong>"{{ query }}"</strong></p>
+                <p>URL: <code>/search/{{ query }}</code></p>
+            </div>
+        </div>
+
+        <div class="results-count">
+            Found <strong>{{ total_results }}</strong> result{% if total_results != 1 %}s{% endif %} for "{{ query }}"
+        </div>
+
+        {% if results %}
+            <div class="results-grid">
+                {% for item in results %}
+                <div class="result-card">
+                    <div class="result-title">{{ item.name }}</div>
+                    <span class="result-type">{{ item.type }}</span>
+                    <p>{{ item.description if item.description else "No description available." }}</p>
+                    {% if item.price > 0 %}
+                        <div class="result-price">${{ "%.2f"|format(item.price) }}</div>
+                    {% else %}
+                        <div class="result-price" style="color: #48bb78;">Free</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <h2>No Results Found</h2>
+                <p>No items found matching "{{ query }}"</p>
+                <p>Try a different search term or browse our categories.</p>
+            </div>
+        {% endif %}
+
+        <div class="exercise-info">
+            <h4>How Search Works:</h4>
+            <div class="code-block">
+# Dynamic route captures search query from URL<br>
+@app.route('/search/&lt;query&gt;')<br>
+def search_results(query):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;# Filter items based on query (case-insensitive)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;results = []<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for item in all_items:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if query.lower() in item['name'].lower():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;results.append(item)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return render_template('search.html',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;query=query,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;results=results,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;total_results=len(results))
+            </div>
+        </div>
+
+        <div class="new-search">
+            <h3>Perform Another Search</h3>
+            <a href="/search-form">New Search</a>
+        </div>
+
+        <h3>Try Other Searches:</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0;">
+            <a href="/search/python" style="padding: 8px 15px; background: #f7fafc; border-radius: 5px;">python</a>
+            <a href="/search/flask" style="padding: 8px 15px; background: #f7fafc; border-radius: 5px;">flask</a>
+            <a href="/search/web" style="padding: 8px 15px; background: #f7fafc; border-radius: 5px;">web</a>
+            <a href="/search/programming" style="padding: 8px 15px; background: #f7fafc; border-radius: 5px;">programming</a>
+            <a href="/search/laptop" style="padding: 8px 15px; background: #f7fafc; border-radius: 5px;">laptop</a>
+        </div>
+    </div>
+</body>
+</html>

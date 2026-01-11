@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Routes - Flask</title>
+    <title>Dynamic Routes - Home</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 50px auto;
             padding: 20px;
             background-color: #f0f4f8;
@@ -20,48 +20,76 @@
         }
         h1 { color: #2d3748; }
         nav {
-            margin-bottom: 20px;
-            padding: 10px;
-            background: #edf2f7;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         nav a {
             margin-right: 15px;
-            color: #4a5568;
+            color: white;
             text-decoration: none;
             font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
         }
-        nav a:hover { color: #2b6cb0; }
-        .route-demo {
-            background: #ebf8ff;
-            border: 2px solid #90cdf4;
-            border-radius: 8px;
+        nav a:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+        .user-info {
+            color: white;
+            font-weight: bold;
+        }
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .exercise-card {
+            background: #f8fafc;
             padding: 20px;
-            margin: 15px 0;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            transition: transform 0.2s;
         }
-        .route-demo h3 {
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .exercise-card h3 {
+            color: #2d3748;
+            margin-top: 0;
+            border-bottom: 2px solid;
+            padding-bottom: 10px;
+        }
+        .exercise-41 { border-color: #4299e1; }
+        .exercise-42 { border-color: #48bb78; }
+        .exercise-43 { border-color: #ed8936; }
+        .exercise-complete {
+            background: #48bb78;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        .demo-links {
+            background: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 20px 0;
+        }
+        .demo-links h3 {
             margin-top: 0;
             color: #2b6cb0;
         }
-        .route-demo a {
-            display: inline-block;
-            margin: 5px 10px 5px 0;
-            padding: 8px 16px;
-            background: #4299e1;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        .route-demo a:hover {
-            background: #3182ce;
-        }
-        code {
-            background: #edf2f7;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: monospace;
-        }
-        .code-block {
+        .route-example {
             background: #2d3748;
             color: #e2e8f0;
             padding: 15px;
@@ -69,73 +97,121 @@
             font-family: monospace;
             margin: 10px 0;
         }
-        .try-it {
-            background: #f0fff4;
-            border-left: 4px solid #48bb78;
-            padding: 15px;
-            margin: 15px 0;
+        .badge {
+            background: #ed8936;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-left: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <nav>
-            <a href="/">Home</a>
-            <a href="/about/">About</a>
-            <a href="/links">URL Builder</a>
+            <div>
+                <a href="/">Home</a>
+                <a href="/about/">About</a>
+                <a href="/links">URL Builder</a>
+                <a href="/search-form">Search <span class="badge">NEW</span></a>
+            </div>
+            <div class="user-info">
+                Student: <strong>Pritam</strong>
+            </div>
         </nav>
 
         <h1>Dynamic Routes in Flask</h1>
-        <p>Learn how to capture values from URLs using <code>&lt;variable&gt;</code> syntax!</p>
+        <p>Learn how to capture values from URLs using Flask's powerful routing system!</p>
 
-        <!-- User Profile Demo -->
-        <div class="route-demo">
-            <h3>1. User Profile Route</h3>
-            <p>Route: <code>/user/&lt;username&gt;</code></p>
-            <div class="code-block">
-                @app.route('/user/&lt;username&gt;')<br>
-                def user_profile(username):<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;return render_template('user.html', username=username)
+        <div class="demo-links">
+            <h3>🎯 Assignment Exercises Completed:</h3>
+            <div class="exercise-grid">
+                <!-- Exercise 4.1 -->
+                <div class="exercise-card exercise-41">
+                    <h3>Exercise 4.1 <span class="exercise-complete">✓ Done</span></h3>
+                    <p><strong>Product Pages:</strong> Dynamic product routes with integer IDs</p>
+                    <div class="route-example">
+                        @app.route('/product/&lt;int:product_id&gt;')
+                    </div>
+                    <p><strong>Try:</strong></p>
+                    <ul>
+                        <li><a href="/product/101">Product 101 (Laptop)</a></li>
+                        <li><a href="/product/102">Product 102 (Smartphone)</a></li>
+                        <li><a href="/product/999">Product 999 (Not Found)</a></li>
+                    </ul>
+                </div>
+
+                <!-- Exercise 4.2 -->
+                <div class="exercise-card exercise-42">
+                    <h3>Exercise 4.2 <span class="exercise-complete">✓ Done</span></h3>
+                    <p><strong>Category + Product:</strong> Nested dynamic routes</p>
+                    <div class="route-example">
+                        @app.route('/category/&lt;category_name&gt;/product/&lt;int:product_id&gt;')
+                    </div>
+                    <p><strong>Try:</strong></p>
+                    <ul>
+                        <li><a href="/category/electronics/product/101">Electronics → Laptop</a></li>
+                        <li><a href="/category/clothing/product/201">Clothing → T-Shirt</a></li>
+                        <li><a href="/category/books/product/301">Books → Python Book</a></li>
+                    </ul>
+                </div>
+
+                <!-- Exercise 4.3 -->
+                <div class="exercise-card exercise-43">
+                    <h3>Exercise 4.3 <span class="exercise-complete">✓ Done</span></h3>
+                    <p><strong>Search Functionality:</strong> Dynamic search routes</p>
+                    <div class="route-example">
+                        @app.route('/search/&lt;query&gt;')
+                    </div>
+                    <p><strong>Try:</strong></p>
+                    <ul>
+                        <li><a href="/search/python">Search "python"</a></li>
+                        <li><a href="/search/web">Search "web"</a></li>
+                        <li><a href="/search-form">Search Form</a></li>
+                    </ul>
+                </div>
             </div>
-            <p><strong>Try it:</strong></p>
-            <a href="/user/Alice">Alice</a>
-            <a href="/user/Bob">Bob</a>
-            <a href="/user/Charlie">Charlie</a>
         </div>
 
-        <!-- Post Demo -->
-        <div class="route-demo">
-            <h3>2. Post Route (Integer Parameter)</h3>
-            <p>Route: <code>/post/&lt;int:post_id&gt;</code></p>
-            <div class="code-block">
-                @app.route('/post/&lt;int:post_id&gt;')<br>
-                def show_post(post_id):<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;return render_template('post.html', post_id=post_id)
+        <h2>📚 URL Parameter Types Demonstration:</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin: 20px 0;">
+            <div style="background: #f8fafc; padding: 15px; border-radius: 5px;">
+                <h4>String</h4>
+                <code>&lt;username&gt;</code>
+                <p><a href="/user/Pritam">/user/Pritam</a></p>
             </div>
-            <p><strong>Try it:</strong></p>
-            <a href="/post/1">Post 1</a>
-            <a href="/post/2">Post 2</a>
-            <a href="/post/3">Post 3</a>
-            <a href="/post/99">Post 99 (Not Found)</a>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 5px;">
+                <h4>Integer</h4>
+                <code>&lt;int:post_id&gt;</code>
+                <p><a href="/post/1">/post/1</a></p>
+            </div>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 5px;">
+                <h4>Float</h4>
+                <code>&lt;float:amount&gt;</code>
+                <p><a href="/price/19.99">/price/19.99</a></p>
+            </div>
+            <div style="background: #f8fafc; padding: 15px; border-radius: 5px;">
+                <h4>Path</h4>
+                <code>&lt;path:filepath&gt;</code>
+                <p><a href="/file/docs/report.pdf">/file/docs/report.pdf</a></p>
+            </div>
         </div>
 
-        <!-- Multiple Parameters Demo -->
-        <div class="route-demo">
-            <h3>3. Multiple Parameters</h3>
-            <p>Route: <code>/user/&lt;username&gt;/post/&lt;int:post_id&gt;</code></p>
-            <p><strong>Try it:</strong></p>
-            <a href="/user/Alice/post/1">Alice's Post 1</a>
-            <a href="/user/Bob/post/2">Bob's Post 2</a>
+        <h2>🔄 Multiple Parameter Routes:</h2>
+        <div class="route-example">
+            @app.route('/user/&lt;username&gt;/post/&lt;int:post_id&gt;')
         </div>
+        <p><strong>Try:</strong></p>
+        <ul>
+            <li><a href="/user/Pritam/post/1">/user/Pritam/post/1</a></li>
+            <li><a href="/user/Alice/post/2">/user/Alice/post/2</a></li>
+            <li><a href="/user/Bob/post/3">/user/Bob/post/3</a></li>
+        </ul>
 
-        <div class="try-it">
-            <strong>Try Your Own!</strong>
-            <p>Type in your browser's address bar:</p>
-            <ul>
-                <li><code>localhost:5000/user/YourName</code></li>
-                <li><code>localhost:5000/post/42</code></li>
-                <li><code>localhost:5000/user/YourName/post/1</code></li>
-            </ul>
+        <div style="background: #f0fff4; padding: 20px; border-radius: 8px; margin-top: 30px; text-align: center;">
+            <h3>✅ All Exercises Successfully Completed!</h3>
+            <p>Exercise 4.1, 4.2, and 4.3 have been implemented with bonus features.</p>
         </div>
     </div>
 </body>

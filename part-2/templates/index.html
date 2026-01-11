@@ -20,37 +20,70 @@
         }
         h1 {
             color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
         }
+        /* Navigation Styles - Exercise 2.3 */
         nav {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #007bff;
+            border-radius: 5px;
         }
         nav a {
-            margin-right: 15px;
-            color: #007bff;
+            margin-right: 20px;
+            color: white;
             text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 3px;
+            transition: background-color 0.3s;
         }
         nav a:hover {
-            text-decoration: underline;
+            background-color: #0056b3;
+            text-decoration: none;
         }
         .highlight {
             background-color: #e7f3ff;
             padding: 15px;
             border-radius: 5px;
             border-left: 4px solid #007bff;
+            margin: 20px 0;
+        }
+        .features {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .feature-box {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        .contact-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Navigation -->
+        <!-- Navigation - Exercise 2.3 -->
         <nav>
-            <a href="/">Home</a>
-            <a href="/about">About</a>
+            <a href="/">🏠 Home</a>
+            <a href="/about">ℹ️ About</a>
+            <a href="/contact">📞 Contact</a>
         </nav>
 
         <h1>Welcome to Flask Templates!</h1>
-
-        <p>This page is being served from an HTML file in the <code>templates/</code> folder.</p>
+        <p>Hello <strong>Pritam</strong>! This page is being served from an HTML file in the <code>templates/</code> folder.</p>
 
         <div class="highlight">
             <strong>What's happening?</strong>
@@ -65,11 +98,32 @@
         </div>
 
         <h2>Why Use Templates?</h2>
+        <div class="features">
+            <div class="feature-box">
+                <h3>✅ Separation of Concerns</h3>
+                <p>Python handles logic, HTML handles presentation</p>
+            </div>
+            <div class="feature-box">
+                <h3>🔧 Easy Maintenance</h3>
+                <p>Edit HTML without touching Python code</p>
+            </div>
+            <div class="feature-box">
+                <h3>🔄 Reusability</h3>
+                <p>Same template can be used with different data</p>
+            </div>
+        </div>
+
+        <!-- Exercise 2.3: Navigation link -->
+        <p>Try our new <strong>Contact page</strong> → 
+        <a href="/contact" class="contact-link">Go to Contact Page</a></p>
+
+        <h3>Current Features:</h3>
         <ul>
-            <li><strong>Separation of Concerns:</strong> Python handles logic, HTML handles presentation</li>
-            <li><strong>Easier to Maintain:</strong> Edit HTML without touching Python code</li>
-            <li><strong>Reusability:</strong> Same template can be used with different data</li>
-            <li><strong>Jinja2 Power:</strong> We can add Python-like logic to HTML (next part!)</li>
+            <li>✅ Home Page (index.html)</li>
+            <li>✅ About Page (about.html)</li>
+            <li>✅ Contact Page (contact.html) - NEW!</li>
+            <li>✅ Navigation between all pages</li>
+            <li>✅ CSS Styling</li>
         </ul>
     </div>
 </body>

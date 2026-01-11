@@ -9,35 +9,59 @@
     <p class="title">{{ info.title }}</p>
     <p class="bio">{{ info.bio }}</p>
     <div style="margin-top: 30px;">
-        <a href="{{ url_for('projects') }}" class="btn btn-primary">View My Projects</a>
-        <a href="{{ url_for('contact') }}" class="btn btn-secondary" style="margin-left: 10px;">Contact Me</a>
+        <a href="{{ url_for('projects') }}" class="btn btn-primary">View Projects</a>
+        <a href="{{ url_for('contact') }}" class="btn btn-secondary">Contact Me</a>
     </div>
 </div>
 
-<!-- Info Card -->
+<!-- Featured Projects -->
 <div class="card">
-    <h2>Welcome to My Flask-Powered Website!</h2>
-    <p>This personal website demonstrates everything you've learned in the Flask tutorial:</p>
-
-    <div class="info-box success">
-        <strong>Concepts Used on This Site:</strong>
-        <ul style="margin-top: 10px; margin-left: 20px;">
-            <li><strong>Part 1:</strong> Flask app setup and routing</li>
-            <li><strong>Part 2:</strong> Templates with render_template()</li>
-            <li><strong>Part 3:</strong> Jinja2 variables, loops, and conditionals</li>
-            <li><strong>Part 4:</strong> Dynamic routes (see individual project pages)</li>
-            <li><strong>Part 5:</strong> Template inheritance and static files</li>
-        </ul>
+    <h2>Featured Projects</h2>
+    <div class="projects-grid">
+        {% for project in projects[:2] %}
+        <div class="project-card">
+            <h3>{{ project.name }}</h3>
+            <p>{{ project.description }}</p>
+            
+            <div class="tech-tags">
+                {% for tech in project.tech %}
+                <span class="tech-tag">{{ tech }}</span>
+                {% endfor %}
+            </div>
+            
+            {% if project.status == 'Completed' %}
+                <span class="status status-completed">{{ project.status }}</span>
+            {% elif project.status == 'In Progress' %}
+                <span class="status status-in-progress">{{ project.status }}</span>
+            {% else %}
+                <span class="status status-planned">{{ project.status }}</span>
+            {% endif %}
+            
+            <a href="{{ url_for('project_detail', project_id=project.id) }}" 
+               class="btn btn-primary" style="display: block; margin-top: 15px;">
+                View Details
+            </a>
+        </div>
+        {% endfor %}
     </div>
 </div>
 
-<!-- Quick Links -->
+<!-- Skills Preview -->
 <div class="card">
-    <h2>Quick Navigation</h2>
-    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
-        <a href="{{ url_for('about') }}" class="btn btn-secondary">About Me</a>
-        <a href="{{ url_for('projects') }}" class="btn btn-secondary">My Projects</a>
-        <a href="{{ url_for('contact') }}" class="btn btn-secondary">Contact</a>
+    <h2>Top Skills</h2>
+    {% for skill in skills[:3] %}
+    <div class="skill-item">
+        <div class="skill-name">
+            <span>{{ skill.name }}</span>
+            <span>{{ skill.level }}%</span>
+        </div>
+        <div class="skill-bar">
+            <div class="skill-progress" style="width: {{ skill.level }}%;"></div>
+        </div>
+    </div>
+    {% endfor %}
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{{ url_for('about') }}" class="btn btn-secondary">View All Skills</a>
     </div>
 </div>
 {% endblock %}

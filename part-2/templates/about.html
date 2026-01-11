@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Flask Templates</title>
+    <title>Contact - Flask Templates</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -20,65 +20,122 @@
         }
         h1 {
             color: #333;
+            border-bottom: 2px solid #dc3545;
+            padding-bottom: 10px;
         }
+        /* Navigation - Exercise 2.3 */
         nav {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #dc3545;
+            border-radius: 5px;
         }
         nav a {
-            margin-right: 15px;
-            color: #007bff;
+            margin-right: 20px;
+            color: white;
             text-decoration: none;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 3px;
+            transition: background-color 0.3s;
         }
         nav a:hover {
-            text-decoration: underline;
+            background-color: #c82333;
+            text-decoration: none;
         }
-        code {
-            background-color: #f4f4f4;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: monospace;
+        .contact-form {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
         }
-        pre {
-            background-color: #2d2d2d;
-            color: #f8f8f2;
-            padding: 15px;
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #dc3545;
+            color: white;
+            padding: 12px 25px;
+            border: none;
             border-radius: 5px;
-            overflow-x: auto;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #c82333;
+        }
+        .contact-info {
+            background-color: #e7f3ff;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Navigation -->
+        <!-- Navigation - Exercise 2.3 -->
         <nav>
-            <a href="/">Home</a>
-            <a href="/about">About</a>
+            <a href="/">🏠 Home</a>
+            <a href="/about">ℹ️ About</a>
+            <a href="/contact">📞 Contact</a>
         </nav>
 
-        <h1>About This Project</h1>
+        <h1>Contact Us</h1>
+        <p>This is the <strong>Contact</strong> page created for <strong>Exercise 2.2</strong>.</p>
+        
+        <div class="contact-form">
+            <h2>Send a Message</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name">Your Name:</label>
+                    <input type="text" id="name" placeholder="Enter your name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" rows="5" placeholder="Type your message here..."></textarea>
+                </div>
+                
+                <button type="submit">Send Message</button>
+            </form>
+            
+            <p><small><em>Note: This is a demo form. In Part 4, we'll learn how to handle form submissions.</em></small></p>
+        </div>
 
-        <p>This is the <strong>About</strong> page, rendered from <code>templates/about.html</code></p>
+        <div class="contact-info">
+            <h3>📞 Contact Information</h3>
+            <p><strong>Developer:</strong> Pritam</p>
+            <p><strong>Project:</strong> Flask Web Development Tutorial</p>
+            <p><strong>Email:</strong> pritam@example.com</p>
+            <p><strong>Location:</strong> India</p>
+            <p><strong>GitHub:</strong> github.com/pritam-flask</p>
+        </div>
 
-        <h2>The render_template() Function</h2>
-        <p>Here's how we render this page in Python:</p>
+        <h3>Flask Route for This Page:</h3>
+        <pre style="background: #2d2d2d; color: white; padding: 15px; border-radius: 5px;">
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')</pre>
 
-        <pre>
-@app.route('/about')
-def about():
-    return render_template('about.html')
-        </pre>
-
-        <h2>How Templates Work</h2>
-        <p>Flask uses a template engine called <strong>Jinja2</strong>. Right now we're just rendering static HTML, but in the next parts, we'll learn how to:</p>
-
-        <ul>
-            <li>Pass variables from Python to HTML</li>
-            <li>Use loops to display lists</li>
-            <li>Use conditionals to show/hide content</li>
-            <li>Create reusable template layouts</li>
-        </ul>
-
-        <p><a href="/">Back to Home</a></p>
+        <p><a href="/">← Back to Home Page</a> | <a href="/about">Visit About Page →</a></p>
     </div>
 </body>
 </html>

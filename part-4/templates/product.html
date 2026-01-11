@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product #{{ product_id }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f4f8;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        nav {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #edf2f7;
+            border-radius: 5px;
+        }
+        nav a {
+            margin-right: 15px;
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .product-found {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        .product-not-found {
+            background: #fed7d7;
+            border: 1px solid #fc8181;
+            color: #c53030;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .product-not-found h2 {
+            margin-top: 0;
+        }
+        .product-header {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .product-header h2 {
+            margin: 0;
+        }
+        .product-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .detail-box {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .price-tag {
+            font-size: 28px;
+            font-weight: bold;
+            color: #48bb78;
+        }
+        .exercise-info {
+            background: #ebf8ff;
+            border-left: 4px solid #4299e1;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About</a>
+            <a href="/links">URL Builder</a>
+            <a href="/search-form">Search</a>
+        </nav>
+
+        <div class="exercise-info">
+            <h3>✅ Exercise 4.1: Product Page</h3>
+            <p>Route: <code>@app.route('/product/&lt;int:product_id&gt;')</code></p>
+            <p>Current URL: <code>/product/{{ product_id }}</code></p>
+        </div>
+
+        {% if product %}
+            <!-- Product found -->
+            <div class="product-header">
+                <h2>{{ product.name }}</h2>
+                <p>Product ID: {{ product_id }}</p>
+            </div>
+
+            <div class="product-found">
+                <div class="price-tag">${{ "%.2f"|format(product.price) }}</div>
+                
+                <div class="product-details">
+                    <div class="detail-box">
+                        <h4>Category</h4>
+                        <p>{{ product.category }}</p>
+                    </div>
+                    <div class="detail-box">
+                        <h4>Description</h4>
+                        <p>{{ product.description }}</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 20px;">
+                    <h4>See in Category:</h4>
+                    <a href="/category/{{ product.category|lower }}/product/{{ product_id }}">
+                        View in {{ product.category }} category
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <!-- Product not found -->
+            <div class="product-not-found">
+                <h2>⚠️ Product Not Found</h2>
+                <p>Sorry, product #{{ product_id }} doesn't exist in our database.</p>
+                
+                <div style="margin-top: 20px;">
+                    <h4>Available Products:</h4>
+                    <ul>
+                        <li><a href="/product/101">Product 101: Laptop</a></li>
+                        <li><a href="/product/102">Product 102: Smartphone</a></li>
+                        <li><a href="/product/103">Product 103: Headphones</a></li>
+                        <li><a href="/product/201">Product 201: T-Shirt</a></li>
+                        <li><a href="/product/202">Product 202: Jeans</a></li>
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="exercise-info">
+            <h4>Python Code for This Route:</h4>
+            <div class="code-block">
+@app.route('/product/&lt;int:product_id&gt;')<br>
+def product_page(product_id):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;products = {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;101: {'name': 'Laptop', 'price': 899.99, 'category': 'Electronics'},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;102: {'name': 'Smartphone', 'price': 699.99, 'category': 'Electronics'},<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ... more products<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;product = products.get(product_id)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return render_template('product.html', product_id=product_id, product=product)
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <h3>Try Other Product IDs:</h3>
+            <a href="/product/101">101</a> |
+            <a href="/product/102">102</a> |
+            <a href="/product/103">103</a> |
+            <a href="/product/201">201</a> |
+            <a href="/product/202">202</a> |
+            <a href="/product/999">999 (Not Found)</a>
+        </div>
+    </div>
+</body>
+</html>

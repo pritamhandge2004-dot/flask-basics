@@ -7,14 +7,15 @@ How to Run:
 3. Try different URLs like /user/YourName or /post/123
 """
 
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, redirect
+import uuid  # For Exercise 4.1 - UUID demo
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', student_name="Pritam")
 
 
 @app.route('/user/<username>')  # <username> captures any text from URL, visit: /user/Alice, /user/Bob
@@ -25,9 +26,9 @@ def user_profile(username):
 @app.route('/post/<int:post_id>')  # <int:post_id> captures only integers, /post/abc returns 404
 def show_post(post_id):
     posts = {  # Simulated post data (in real apps, this comes from a database)
-        1: {'title': 'Getting Started with Flask', 'content': 'Flask is a micro-framework...'},
-        2: {'title': 'Understanding Routes', 'content': 'Routes map URLs to functions...'},
-        3: {'title': 'Working with Templates', 'content': 'Jinja2 makes HTML dynamic...'},
+        1: {'title': 'Getting Started with Flask', 'content': 'Flask is a micro-framework...', 'author': 'Pritam'},
+        2: {'title': 'Understanding Routes', 'content': 'Routes map URLs to functions...', 'author': 'Pritam'},
+        3: {'title': 'Working with Templates', 'content': 'Jinja2 makes HTML dynamic...', 'author': 'Pritam'},
     }
     post = posts.get(post_id)  # Get the post or None if not found
     return render_template('post.html', post_id=post_id, post=post)
@@ -56,38 +57,102 @@ def show_links():
     return render_template('links.html', links=links)
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
 # =============================================================================
-# URL PARAMETER TYPES:
-# =============================================================================
-#
-# <variable>         - String (default), accepts any text without slashes
-# <int:variable>     - Integer, accepts only positive integers
-# <float:variable>   - Float, accepts floating point numbers
-# <path:variable>    - String, but also accepts slashes
-# <uuid:variable>    - UUID strings
-#
+# EXERCISE SOLUTIONS
 # =============================================================================
 
-# =============================================================================
-# EXERCISES:
-# =============================================================================
-#
 # Exercise 4.1: Create a product page
-#   - Add route /product/<int:product_id>
-#   - Create a products dictionary with id, name, price
-#   - Display product details or "Not Found" message
-#
+@app.route('/product/<int:product_id>')
+def product_page(product_id):
+    # Simulated product database
+    products = {
+        101: {'name': 'Laptop', 'price': 899.99, 'category': 'Electronics', 'description': 'High-performance laptop'},
+        102: {'name': 'Smartphone', 'price': 699.99, 'category': 'Electronics', 'description': 'Latest smartphone model'},
+        103: {'name': 'Headphones', 'price': 149.99, 'category': 'Electronics', 'description': 'Noise-cancelling headphones'},
+        201: {'name': 'T-Shirt', 'price': 19.99, 'category': 'Clothing', 'description': 'Cotton t-shirt'},
+        202: {'name': 'Jeans', 'price': 49.99, 'category': 'Clothing', 'description': 'Denim jeans'},
+    }
+    
+    product = products.get(product_id)
+    return render_template('product.html', product_id=product_id, product=product)
+
+
 # Exercise 4.2: Category and product route
-#   - Add route /category/<category_name>/product/<int:product_id>
-#   - Display both the category and product information
-#
+@app.route('/category/<category_name>/product/<int:product_id>')
+def category_product(category_name, product_id):
+    # Simulated database with category filtering
+    products = {
+        'electronics': {
+            101: {'name': 'Laptop', 'price': 899.99},
+            102: {'name': 'Smartphone', 'price': 699.99},
+            103: {'name': 'Headphones', 'price': 149.99},
+        },
+        'clothing': {
+            201: {'name': 'T-Shirt', 'price': 19.99},
+            202: {'name': 'Jeans', 'price': 49.99},
+            203: {'name': 'Jacket', 'price': 89.99},
+        },
+        'books': {
+            301: {'name': 'Python Programming', 'price': 39.99},
+            302: {'name': 'Web Development', 'price': 29.99},
+        }
+    }
+    
+    category_products = products.get(category_name.lower(), {})
+    product = category_products.get(product_id)
+    
+    return render_template('category_product.html', 
+                          category_name=category_name, 
+                          product_id=product_id, 
+                          product=product,
+                          category_products=category_products)
+
+
 # Exercise 4.3: Search route
-#   - Add route /search/<query>
-#   - Display "Search results for: [query]"
-#   - Bonus: Add a simple search form that redirects to this route
-#
-# =============================================================================
+@app.route('/search/<query>')
+def search_results(query):
+    # Simulated search results
+    all_items = [
+        {'name': 'Python Flask Tutorial', 'type': 'Book', 'price': 29.99},
+        {'name': 'Web Development Course', 'type': 'Course', 'price': 99.99},
+        {'name': 'Programming Laptop', 'type': 'Electronics', 'price': 899.99},
+        {'name': 'Code Editor', 'type': 'Software', 'price': 0.00},
+        {'name': 'Flask Web Framework', 'type': 'Library', 'price': 0.00},
+        {'name': 'Python Programming', 'type': 'Book', 'price': 39.99},
+    ]
+    
+    # Simple search logic (case-insensitive)
+    results = [item for item in all_items if query.lower() in item['name'].lower()]
+    
+    return render_template('search.html', query=query, results=results, total_results=len(results))
+
+
+# Bonus for Exercise 4.3: Search form that redirects
+@app.route('/search-form', methods=['GET', 'POST'])
+def search_form():
+    if request.method == 'POST':
+        query = request.form.get('search_query', '').strip()
+        if query:
+            return redirect(url_for('search_results', query=query))
+    
+    return render_template('search_form.html')
+
+
+# Bonus: Additional routes to demonstrate other parameter types
+@app.route('/price/<float:amount>')
+def show_price(amount):
+    return render_template('price.html', amount=amount)
+
+
+@app.route('/file/<path:filepath>')
+def show_file(filepath):
+    return render_template('file.html', filepath=filepath)
+
+
+@app.route('/uuid/<uuid:uuid_value>')
+def show_uuid(uuid_value):
+    return render_template('uuid.html', uuid_value=uuid_value)
+
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5002)  # Changed port to avoid conflicts

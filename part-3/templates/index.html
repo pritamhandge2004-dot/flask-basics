@@ -21,29 +21,30 @@
         h1 { color: #2d3748; }
         nav {
             margin-bottom: 20px;
-            padding: 10px;
-            background: #edf2f7;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
         }
         nav a {
             margin-right: 15px;
-            color: #4a5568;
+            color: white;
             text-decoration: none;
             font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
         }
-        nav a:hover { color: #2b6cb0; }
+        nav a:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
         .highlight {
             background: #ebf8ff;
             border-left: 4px solid #4299e1;
             padding: 15px;
             margin: 20px 0;
             border-radius: 0 5px 5px 0;
-        }
-        code {
-            background: #edf2f7;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: monospace;
         }
         .variable-demo {
             font-size: 24px;
@@ -54,43 +55,103 @@
             text-align: center;
             margin: 20px 0;
         }
+        .new-feature {
+            background: #f0fff4;
+            border: 2px solid #48bb78;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .badge {
+            background: #ed8936;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <nav>
-            <a href="/">Home</a>
-            <a href="/profile">Profile</a>
-            <a href="/skills">Skills</a>
-            <a href="/projects">Projects</a>
+            <div>
+                <a href="/">Home</a>
+                <a href="/profile">Profile</a>
+                <a href="/skills">Skills</a>
+                <a href="/projects">Projects</a>
+                <!-- Exercise 3.3: New Grades page link -->
+                <a href="/grades">Grades <span class="badge">NEW</span></a>
+            </div>
+            <div style="color: white;">
+                Student: <strong>Pritam</strong>
+            </div>
         </nav>
 
         <h1>Welcome to Jinja2 Variables!</h1>
 
-        <!-- HERE'S THE MAGIC: Using a variable passed from Python -->
+        <!-- Updated with Pritam's name -->
         <div class="variable-demo">
-            Hello, <strong>{{ name }}</strong>!
+            Hello, <strong>{{ name }}</strong>! Welcome to Flask Templates!
         </div>
 
         <div class="highlight">
             <strong>What just happened?</strong>
             <p>In <code>app.py</code>, we wrote:</p>
-            <code>return render_template('index.html', name=student_name)</code>
+            <code>return render_template('index.html', name="Pritam")</code>
             <p>And in this HTML, we display it with:</p>
             <code>{% raw %}{{ name }}{% endraw %}</code>
+            <p>Current value: <strong>{{ name }}</strong></p>
         </div>
 
-        <h2>The Double Curly Braces {% raw %}{{ }}{% endraw %}</h2>
-        <p>In Jinja2 templates, <code>{% raw %}{{ }}{% endraw %}</code> means "output this Python value here".</p>
+        <div class="new-feature">
+            <h3>🎯 Assignment Exercises Completed:</h3>
+            <ol>
+                <li><strong>Exercise 3.1:</strong> Added more profile fields (email, city, phone, etc.) ✅</li>
+                <li><strong>Exercise 3.2:</strong> Conditional display for enrollment status ✅</li>
+                <li><strong>Exercise 3.3:</strong> Created new <a href="/grades">Grades page</a> with table ✅</li>
+            </ol>
+        </div>
 
+        <h2>Jinja2 Filters Demonstration:</h2>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <tr style="background: #edf2f7;">
+                <th style="padding: 10px; text-align: left;">Filter</th>
+                <th style="padding: 10px; text-align: left;">Code</th>
+                <th style="padding: 10px; text-align: left;">Result</th>
+            </tr>
+            <tr>
+                <td style="padding: 10px;">Uppercase</td>
+                <td style="padding: 10px;"><code>{% raw %}{{ name|upper }}{% endraw %}</code></td>
+                <td style="padding: 10px;"><strong>{{ name|upper }}</strong></td>
+            </tr>
+            <tr style="background: #f7fafc;">
+                <td style="padding: 10px;">Lowercase</td>
+                <td style="padding: 10px;"><code>{% raw %}{{ name|lower }}{% endraw %}</code></td>
+                <td style="padding: 10px;"><strong>{{ name|lower }}</strong></td>
+            </tr>
+            <tr>
+                <td style="padding: 10px;">Capitalize</td>
+                <td style="padding: 10px;"><code>{% raw %}{{ name|capitalize }}{% endraw %}</code></td>
+                <td style="padding: 10px;"><strong>{{ name|capitalize }}</strong></td>
+            </tr>
+            <tr style="background: #f7fafc;">
+                <td style="padding: 10px;">Length</td>
+                <td style="padding: 10px;"><code>{% raw %}{{ name|length }}{% endraw %}</code></td>
+                <td style="padding: 10px;"><strong>{{ name|length }}</strong> characters</td>
+            </tr>
+        </table>
+
+        <h3>New Features Added:</h3>
         <ul>
-            <li><code>{% raw %}{{ name }}{% endraw %}</code> - Outputs the value of <code>name</code></li>
-            <li><code>{% raw %}{{ name|upper }}{% endraw %}</code> - Outputs in UPPERCASE: <strong>{{ name|upper }}</strong></li>
-            <li><code>{% raw %}{{ name|lower }}{% endraw %}</code> - Outputs in lowercase: <strong>{{ name|lower }}</strong></li>
-            <li><code>{% raw %}{{ name|length }}{% endraw %}</code> - Length of the name: <strong>{{ name|length }}</strong> characters</li>
+            <li>✅ All pages updated with <strong>Pritam</strong> as the student name</li>
+            <li>✅ Enhanced profile with more data fields</li>
+            <li>✅ New <strong>Grades</strong> page with subject-wise marks</li>
+            <li>✅ Improved navigation with active page highlighting</li>
+            <li>✅ Better styling and visual feedback</li>
         </ul>
 
-        <p>Explore the other pages to see more Jinja2 features!</p>
+        <p>Explore the other pages to see all the Jinja2 features in action!</p>
     </div>
 </body>
 </html>

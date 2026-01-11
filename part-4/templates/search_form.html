@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search - Dynamic Routes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f0f4f8;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        nav {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #edf2f7;
+            border-radius: 5px;
+        }
+        nav a {
+            margin-right: 15px;
+            color: #4a5568;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .search-box {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .search-box h2 {
+            margin: 0 0 20px 0;
+        }
+        .search-form {
+            display: flex;
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .search-form input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .search-form button {
+            padding: 15px 30px;
+            background: #2d3748;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .search-form button:hover {
+            background: #4a5568;
+        }
+        .exercise-info {
+            background: #feebc8;
+            border-left: 4px solid #ed8936;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+        .example-searches {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .example-searches a {
+            padding: 8px 15px;
+            background: #f7fafc;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        .example-searches a:hover {
+            background: #edf2f7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a href="/">Home</a>
+            <a href="/about/">About</a>
+            <a href="/links">URL Builder</a>
+            <a href="/search-form">Search</a>
+        </nav>
+
+        <div class="exercise-info">
+            <h3>✅ Exercise 4.3: Search Functionality (Bonus Form)</h3>
+            <p>This form collects search queries and redirects to the dynamic search route.</p>
+        </div>
+
+        <div class="search-box">
+            <h2>Search Our Database</h2>
+            <p>Enter a search term to find products, courses, and resources:</p>
+            
+            <form method="POST" class="search-form">
+                <input type="text" name="search_query" placeholder="Search for products, courses, tutorials..." 
+                       value="{{ request.args.get('q', '') }}" required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <h3>How It Works:</h3>
+        <div class="code-block">
+# The search route (dynamic URL parameter)<br>
+@app.route('/search/&lt;query&gt;')<br>
+def search_results(query):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return render_template('search.html', query=query)<br><br>
+# The search form (processes POST request)<br>
+@app.route('/search-form', methods=['GET', 'POST'])<br>
+def search_form():<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if request.method == 'POST':<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;query = request.form.get('search_query')<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return redirect(url_for('search_results', query=query))
+        </div>
+
+        <h3>Try These Example Searches:</h3>
+        <div class="example-searches">
+            <a href="/search/python">python</a>
+            <a href="/search/flask">flask</a>
+            <a href="/search/web">web</a>
+            <a href="/search/programming">programming</a>
+            <a href="/search/laptop">laptop</a>
+            <a href="/search/course">course</a>
+            <a href="/search/book">book</a>
+            <a href="/search/development">development</a>
+        </div>
+
+        <div class="exercise-info">
+            <h4>📝 Key Concepts Demonstrated:</h4>
+            <ol>
+                <li><strong>Dynamic URL Parameters:</strong> <code>/search/&lt;query&gt;</code> captures search terms</li>
+                <li><strong>Form Handling:</strong> POST form collects user input</li>
+                <li><strong>Redirect:</strong> Form submission redirects to dynamic URL</li>
+                <li><strong>url_for():</strong> Generates URL for search route dynamically</li>
+                <li><strong>String Parameters:</strong> Query can be any string value</li>
+            </ol>
+        </div>
+
+        <p><strong>Note:</strong> This is a demo. In a real application, the search would query a database.</p>
+    </div>
+</body>
+</html>

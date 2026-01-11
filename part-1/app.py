@@ -14,28 +14,24 @@ app = Flask(__name__)  # Create Flask app instance, __name__ tells Flask where t
 
 @app.route('/')  # Decorator that maps URL '/' (home page) to this function
 def home():
-    return "Hello Flask! Welcome to my first web server!"  # This text displays in the browser
+    return "<h1 style='color: blue;'>Hello Pritam! Welcome to Flask!</h1><p>This is HTML content with styling!</p><p>Learning web development is fun!</p>"
+
+
+# Exercise 1.3: Add a second route
+@app.route('/about')  # Maps URL '/about' to this function
+def about():
+    return """
+    <h2>About This Website</h2>
+    <p>This is my first Flask web application.</p>
+    <p>I'm learning Python web development with Flask.</p>
+    <ul>
+        <li>Created by: <strong>Pritam</strong></li>
+        <li>Date: Today</li>
+        <li>Purpose: Learning Flask basics</li>
+    </ul>
+    <a href="/">Back to Home</a>
+    """
 
 
 if __name__ == '__main__':
     app.run(debug=True)  # debug=True enables auto-reload and detailed error messages
-
-
-# =============================================================================
-# EXERCISES - Try these after running the basic app:
-# =============================================================================
-#
-# Exercise 1.1: Change the return message
-#   - Modify the return statement to say "Hello [Your Name]!"
-#   - Save the file and refresh your browser (server auto-reloads!)
-#
-# Exercise 1.2: Return HTML instead of plain text
-#   - Change the return to: return "<h1>Hello Flask!</h1><p>This is HTML</p>"
-#   - Notice how the browser renders it as formatted HTML
-#
-# Exercise 1.3: Add a second route
-#   - Add another function with @app.route('/about')
-#   - Return something like "This is the about page"
-#   - Visit http://localhost:5000/about in your browser
-#
-# =============================================================================
